@@ -34,38 +34,41 @@ const SignUp: React.FC = () => {
   const emailInputRef = useRef<TextInput>(null);
   const passwordInputRef = useRef<TextInput>(null);
 
-  const handleSignUp = useCallback(async (data: SignUpFormData) => {
-    try {
-      formRef.current?.setErrors({});
-      const schema = Yup.object().shape({
-        name: Yup.string().required('Nome obrigatorio.'),
-        email: Yup.string()
-          .required('E-mail obrigatorio.')
-          .email('Digite um E-mail valido.'),
-        password: Yup.string().min(6, 'Senha minima de 6 digitos'),
-      });
+  const handleSignUp = useCallback(
+    async (data: SignUpFormData) => {
+      try {
+        formRef.current?.setErrors({});
+        const schema = Yup.object().shape({
+          name: Yup.string().required('Nome obrigatorio.'),
+          email: Yup.string()
+            .required('E-mail obrigatorio.')
+            .email('Digite um E-mail valido.'),
+          password: Yup.string().min(6, 'Senha minima de 6 digitos'),
+        });
 
-      await schema.validate(data, {
-        abortEarly: false,
-      });
+        await schema.validate(data, {
+          abortEarly: false,
+        });
 
-      await api.post('/users', data);
+        await api.post('/users', data);
 
-      Alert.alert('Cadastro realizado com sucesso', 'Realize o login!');
-      navigation.goBack();
-    } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        const errors = getValidationsErrors(err);
-        formRef.current?.setErrors(errors);
-        return;
+        Alert.alert('Cadastro realizado com sucesso', 'Realize o login!');
+        navigation.goBack();
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationsErrors(err);
+          formRef.current?.setErrors(errors);
+          return;
+        }
+
+        Alert.alert(
+          'Erro na cadastro',
+          'Ocorreu um erro ao fazer o cadastro, tente nvoamente mais tarde.',
+        );
       }
-
-      Alert.alert(
-        'Erro na cadastro',
-        'Ocorreu um erro ao fazer o cadastro, tente nvoamente mais tarde.',
-      );
-    }
-  }, []);
+    },
+    [navigation],
+  );
 
   return (
     <>
