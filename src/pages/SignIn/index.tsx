@@ -1,11 +1,10 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import {
   Image,
   KeyboardAvoidingView,
   Platform,
   View,
   ScrollView,
-  TextInput,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Form } from '@unform/mobile';
